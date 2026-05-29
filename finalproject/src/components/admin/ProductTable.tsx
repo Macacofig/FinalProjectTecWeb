@@ -9,6 +9,7 @@ import type { AxiosError } from "axios";
 import ProductService from "@/services/product.service";
 import type { ApiErrorPayload } from "@/types/api-error-payload.type";
 import { formatPrice } from "@/utils/currency.util";
+import StockAlert from "./StockAlert";
 
 export default function ProductTable() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -81,6 +82,7 @@ export default function ProductTable() {
   return (
     <div className="admin-table-shell">
       <div className="admin-table-shell__inner">
+        <StockAlert products={products} />
         <Table
           columns={columns}
           data={products}
