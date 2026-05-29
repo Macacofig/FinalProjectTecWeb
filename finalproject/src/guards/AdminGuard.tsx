@@ -12,17 +12,22 @@ const ADMIN_ROLE: UserRole = "ROLE_ADMIN";
 export function AdminGuard({ children }: { children: ReactNode }) {
   const router = useRouter();
   
-  const { isAuthenticated, loading, user } = useAuth();
+  const { isAuthenticated, loading, user, openLoginModal } = useAuth();
 
   
   useEffect(() => {
 
     //verificar si es admin
-    if (!loading && (!isAuthenticated || user?.role !== ADMIN_ROLE)) {
+    if (!loading && !isAuthenticated) {
+      openLoginModal();
+      return;
+    }
+
+    if (!loading && user?.role !== ADMIN_ROLE) {
       
       router.replace("/");
     }
-  }, [isAuthenticated, loading, router, user?.role]);
+  }, [isAuthenticated, loading, openLoginModal, router, user?.role]);
 
   
   if (loading || !isAuthenticated || user?.role !== ADMIN_ROLE) {

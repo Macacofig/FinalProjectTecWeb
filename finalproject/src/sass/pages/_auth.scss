@@ -156,6 +156,11 @@
   justify-content: center;
 }
 
+.auth-form--compact {
+  padding: 0;
+  justify-content: flex-start;
+}
+
 .auth-form__eyebrow {
   margin: 0;
   color: map.get(map.get($colors, brand), 200);
@@ -271,6 +276,13 @@
 
 .auth-link:hover {
   color: map.get(map.get($colors, brand), 100);
+}
+
+.auth-link--button {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
 }
 
 .auth-status {

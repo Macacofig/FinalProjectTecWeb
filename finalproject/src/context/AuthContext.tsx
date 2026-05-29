@@ -11,10 +11,13 @@ interface AuthContextValue {
   token: string | null;
   loading: boolean;
   isAuthenticated: boolean;
+  loginModalOpen: boolean;
   signIn: (credentials: AuthCredentials) => Promise<AuthSession>;
   register: (user: User) => Promise<AuthSession>;
   signOut: () => void;
   refreshUser: () => Promise<void>;
+  openLoginModal: () => void;
+  closeLoginModal: () => void;
 }
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
@@ -26,6 +29,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [token, setTokenState] = useState<string | null>(null);
   //si auth sigue verificando
   const [loading, setLoading] = useState(true);
+  const [loginModalOpen, setLoginModalOpen] = useState(false);
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
@@ -80,18 +84,29 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setLoading(false);
   }, []);
 
+  const openLoginModal = useCallback(() => {
+    setLoginModalOpen(true);
+  }, []);
+
+  const closeLoginModal = useCallback(() => {
+    setLoginModalOpen(false);
+  }, []);
+
   const contextValue = useMemo(
     () => ({
       user,
       token,
       loading,
+      loginModalOpen,
       isAuthenticated: Boolean(user && token && !isTokenExpired(token)),
       signIn,
       register,
       signOut,
       refreshUser,
+      openLoginModal,
+      closeLoginModal,
     }),
-    [loading, register, refreshUser, signIn, signOut, token, user]
+    [closeLoginModal, loading, loginModalOpen, openLoginModal, register, refreshUser, signIn, signOut, token, user]
   );
 
   return (

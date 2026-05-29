@@ -3,7 +3,6 @@
 import type { FormEvent } from "react";
 import type { FormState } from "@/types/form-state.type";
 import { useEffect, useState } from "react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuth } from "../../hooks/useAuth";
 
@@ -13,7 +12,7 @@ const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export default function RegisterPage() {
   const router = useRouter();
-  const { register, loading, isAuthenticated } = useAuth();
+  const { register, loading, isAuthenticated, openLoginModal } = useAuth();
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -221,9 +220,9 @@ export default function RegisterPage() {
 
           <p className="auth-footnote">
             ¿Ya tienes cuenta?{" "}
-            <Link className="auth-link" href="/login">
+            <button type="button" className="auth-link auth-link--button" onClick={openLoginModal}>
               Entrar
-            </Link>
+            </button>
           </p>
         </form>
       </section>

@@ -8,7 +8,7 @@ import { useAuth } from "../../hooks/useAuth";
 export default function AppHeader() {
   const router = useRouter();
   const pathname = usePathname();
-  const { user, isAuthenticated, loading, signOut } = useAuth();
+  const { user, isAuthenticated, loading, signOut, openLoginModal } = useAuth();
   const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
@@ -21,6 +21,7 @@ export default function AppHeader() {
 
   const handleSignOut = () => {
     signOut();
+    openLoginModal();
     router.push("/");
   };
 
