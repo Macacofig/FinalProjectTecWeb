@@ -5,6 +5,23 @@ ShopWave Fusion is an e-commerce monorepo with two apps:
 - `finalproject`: Next.js frontend with customer and admin views
 - `shopwavefusionbackend/shopwavefusionbackend`: Spring Boot REST API
 
+## Mejoras Implementadas (Avance desde el 60%)
+
+1. **Rediseño Visual Premium (Glassmorphism):** Migración a un diseño profesional, empleando blurs, paletas curadas y sistemas de grillas que mejoran la jerarquía visual.
+2. **Responsividad Total (Mobile-First):** Reescritura de la arquitectura SCSS para adaptar dinámicamente pantallas, formularios, grillas y tablas complejas (con scroll horizontal) sin desbordamientos.
+3. **Buscador en Tiempo Real (Live Search):** Implementación de "debouncing" para filtrar productos desde la base de datos conforme se escribe.
+4. **Manejo de Estados de Interfaz:** Implementación de interfaces de carga (Skeletons/Spinners), estados vacíos profesionales, y manejo robusto de errores.
+5. **Corrección de Endpoints Backend:** Resolución de colisiones de enrutamiento y soporte de insensibilidad de mayúsculas/minúsculas en consultas nativas.
+
+## Tecnologías Utilizadas y Arquitectura
+
+Este proyecto sigue los lineamientos de la rúbrica sobre **Organización Semántica y Componentización**:
+
+- **Frontend:** Next.js (App Router), React 18, TypeScript estricto (uso de Interfaces), Etiquetas semánticas HTML5.
+- **Backend:** Java 17, Spring Boot 3, Spring Security (JWT), MySQL, Maven.
+- **Estilos (SASS/SCSS):** Reutilización modular bajo metodología BEM. Mezcla dinámica de breakpoints usando `@include mixins.up(md)`.
+- **Estado:** Context API para sesión (AuthContext) y compras (CartContext).
+
 ## Project Structure
 
 - `finalproject`: storefront, auth pages, cart, checkout, profile, and admin panel
