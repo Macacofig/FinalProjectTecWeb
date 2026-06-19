@@ -32,10 +32,14 @@ export default function AdminPage() {
     loadData();
   }, []);
 
-  const totalRevenue = orders.reduce(
-    (sum, o) => sum + (o.totalPrice ?? 0),
-    0
-  );
+  const totalRevenue = orders
+    .filter(
+      (o) =>
+        o.orderStatus === "CONFIRMED" ||
+        o.orderStatus === "SHIPPED" ||
+        o.orderStatus === "DELIVERED"
+    )
+    .reduce((sum, o) => sum + (o.totalPrice ?? 0), 0);
 
   const pendingOrders = orders.filter(
     (o) => o.orderStatus === "PENDING" || o.orderStatus === "PLACED"

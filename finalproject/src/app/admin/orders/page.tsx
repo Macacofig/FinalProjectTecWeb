@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import Table from "@/components/ui/Table";
 import { AdminGuard } from "@/guards/AdminGuard";
 import type { Order } from "@/models/order.model";
-import { getOrders } from "@/services/order.service";
+import { getOrders, confirmOrder } from "@/services/order.service";
 import { formatPrice } from "@/utils/currency.util";
 import { formatOrderStatus, formatPaymentStatus } from "@/utils/order-format.util";
 
@@ -56,6 +56,17 @@ export default function AdminOrdersPage() {
     loadOrders();
   }, []);
 
+  const handleConfirmOrder = async (orderId: number) => {
+    try {
+      await confirmOrder(orderId);
+      // Refresh list
+      setOrders(prev => prev.map(o => o.id === orderId ? { ...o, orderStatus: 'CONFIRMED' } : o));
+    } catch (err) {
+      console.error("Error confirming order:", err);
+      alert("Error al confirmar el pedido");
+    }
+  };
+
   const columns = [
     {
       header: "Orden",
@@ -88,12 +99,23 @@ export default function AdminOrdersPage() {
     {
       header: "Acciones",
       accessor: (order: Order) => (
-        <button
-          className="admin-detail-btn"
-          onClick={() => router.push(`/admin/orders/${order.id}`)}
-        >
-          Ver detalles
-        </button>
+        <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+          <button
+            className="admin-detail-btn"
+            onClick={() => router.push(`/admin/orders/${order.id}`)}
+          >
+            Ver detalles
+          </button>
+          {(order.orderStatus === "PENDING" || order.orderStatus === "PLACED") && (
+            <button
+              className="button button--primary"
+              style={{ padding: '0.5rem 1rem', fontSize: '0.875rem' }}
+              onClick={() => handleConfirmOrder(order.id!)}
+            >
+              Confirmar
+            </button>
+          )}
+        </div>
       ),
     },
   ];

@@ -5,7 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 
 import { AdminGuard } from "@/guards/AdminGuard";
 import type { Order } from "@/models/order.model";
-import { getOrderById } from "@/services/order.service";
+import { getOrderById, confirmOrder } from "@/services/order.service";
 import { formatPrice } from "@/utils/currency.util";
 import { formatOrderStatus, formatPaymentStatus } from "@/utils/order-format.util";
 
@@ -40,17 +40,39 @@ export default function AdminOrderDetailPage() {
     if (params.id) loadOrder();
   }, [params.id]);
 
+  const handleConfirmOrder = async () => {
+    if (!order?.id) return;
+    try {
+      await confirmOrder(order.id);
+      setOrder(prev => prev ? { ...prev, orderStatus: 'CONFIRMED' } : null);
+    } catch (err) {
+      console.error("Error confirming order:", err);
+      alert("Error al confirmar el pedido");
+    }
+  };
+
   return (
     <AdminGuard>
       <main className="page-shell page-shell--medium admin-page">
         <header className="admin-page__header">
           <p className="page-header__eyebrow">Admin / Pedidos / Detalle</p>
-          <h1 className="page-header__title">
-            {order ? `Orden #${order.id}` : "Detalle de pedido"}
-          </h1>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
+            <h1 className="page-header__title">
+              {order ? `Orden #${order.id}` : "Detalle de pedido"}
+            </h1>
+            {order && (order.orderStatus === "PENDING" || order.orderStatus === "PLACED") && (
+              <button
+                className="button button--primary"
+                onClick={handleConfirmOrder}
+              >
+                Confirmar Pedido
+              </button>
+            )}
+          </div>
           <button
             className="admin-detail-btn"
             onClick={() => router.push("/admin/orders")}
+            style={{ marginTop: '1rem' }}
           >
             ← Volver a pedidos
           </button>

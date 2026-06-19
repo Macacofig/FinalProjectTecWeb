@@ -41,3 +41,14 @@ export async function getOrderById(
 
   return response.data;
 }
+
+export async function confirmOrder(
+  orderId: number
+): Promise<Order> {
+
+  const response = await apiClient.put<Order>(
+    `/admin/orders/${orderId}/confirmed`
+  );
+
+  return response.data;
+}
